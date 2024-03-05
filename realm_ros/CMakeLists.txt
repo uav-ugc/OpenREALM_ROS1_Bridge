@@ -50,7 +50,8 @@ find_package(catkin REQUIRED COMPONENTS
         geographic_msgs
         realm_msgs
 )
-
+# boost
+find_package(Boost COMPONENTS thread filesystem date_time system REQUIRED)
 # Fix to avoid OpenCV package confusion with ROS melodic
 find_package(OpenCV 3.3.1 EXACT QUIET)
 if (NOT OpenCV_FOUND)
@@ -71,7 +72,8 @@ find_package(OpenMP REQUIRED)
 #find_package(ORB_SLAM2 REQUIRED)
 #find_package(ORB_SLAM3 REQUIRED)
 #find_package(ov2slam REQUIRED)
-
+find_package(fbow REQUIRED)
+find_package(CGAL REQUIRED)
 find_package(VTK REQUIRED)
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 
@@ -114,6 +116,8 @@ add_library(${PROJECT_NAME} SHARED
         src/realm_ros_lib/stage_node.cpp
         src/realm_ros_lib/conversions.cpp
 )
+set(CMAKE_MODULE_PATH "/usr/lib/x86_64-linux-gnu/cmake")
+add_library(FLANN::FLANN INTERFACE IMPORTED)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
         include
@@ -124,6 +128,8 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
         ${catkin_LIBRARIES}
         ${cmake_modules_LIBRARIES}
         ${OpenCV_LIBRARIES}
+	${Boost_FILESYSTEM_LIBRARIES}
+ 	${Boost_SYSTEM_LIBRARIES}
 	realm_stages
 )
 
